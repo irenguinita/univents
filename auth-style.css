@@ -1,0 +1,109 @@
+:root {
+    --teal-bg: #326257;
+    --charcoal-bg: #262626;
+    --orange-btn: #E68A6E;
+    --input-bg: #F2EDE4;
+    --text-dark: #333;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+/* Navbar */
+header {
+    padding: 20px 80px;
+    background: #F2EDE4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8rem; color: #444; }
+nav a { text-decoration: none; color: #666; margin-left: 30px; font-weight: 600; font-size: 0.9rem; }
+
+/* Split Layout */
+.auth-container { display: flex; height: calc(100vh - 80px); }
+
+/* Left Panel */
+.left-panel {
+    flex: 1;
+    position: relative;
+    padding: 80px;
+    color: white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.left-panel h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 0.9;
+    z-index: 2;
+}
+.left-panel p { max-width: 400px; margin-top: 20px; z-index: 2; opacity: 0.9; }
+
+/* Abstract Circles */
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+/* Right Panel (Form) */
+.right-panel {
+    flex: 1;
+    background: white;
+    padding: 60px 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.form-box h2 { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin-bottom: 5px; }
+.form-box p { color: #888; margin-bottom: 30px; }
+.form-box a { color: #E67E22; font-weight: bold; text-decoration: none; }
+
+.input-group { margin-bottom: 15px; }
+.input-group label { display: block; font-weight: bold; margin-bottom: 8px; color: #555; font-size: 0.85rem; }
+input, select {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    background: var(--input-bg);
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.btn-auth {
+    width: 100%;
+    background: var(--orange-btn);
+    color: white;
+    border: none;
+    padding: 18px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* Role Toggle */
+.role-toggle {
+    display: flex;
+    background: var(--input-bg);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+.role-btn {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: #888;
+}
+.role-btn.active {
+    background: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-radius: 10px;
+    color: var(--text-dark);
+}
