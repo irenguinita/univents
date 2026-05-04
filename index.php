@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Univents - Smart University Events</title>
+    <title>Univents - Smarter Events Start Here</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts: Montserrat for bold headings, Inter for body -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -14,7 +13,7 @@
     <header>
         <div class="container nav-wrapper">
             <div class="logo">
-                <img src="logo.png" alt="Univents Logo"> <span>Univents</span>
+                <span>Univents</span>
             </div>
             <nav>
                 <ul>
@@ -37,7 +36,7 @@
             <div class="container hero-grid">
                 <div class="hero-text">
                     <span class="badge">University Event Hub • Live</span>
-                    <h1>SMARTER <br> EVENTS <br> <span class="gradient-text">START HERE</span></h1>
+                    <h1>SMARTER <br> EVENTS <br> <span class="teal-text">START HERE</span></h1>
                     <p>An all-in-one platform where students effortlessly discover and register for campus events — while organizers stay in full control with live attendance insights.</p>
                     
                     <a href="events.php" class="btn-dark">Explore Events <span>→</span></a>
@@ -58,13 +57,11 @@
                     </div>
                 </div>
 
+                <!-- OVERLAPPING PAPERS AREA -->
                 <div class="hero-visual">
-                    <!-- Replace these with your Figma-exported images -->
-                    <div class="card-stack">
-                        <div class="card c1">Event #1 - RSVP Available</div>
-                        <div class="card c2"><img src="gdg-logo.png" alt="GDG"> Google Developers...</div>
-                        <div class="card c3">INFOSESSION '26</div>
-                    </div>
+                    <img src="paper1.png" alt="Paper 1" class="paper p1">
+                    <img src="paper2.png" alt="Paper 2" class="paper p2">
+                    <img src="paper3.png" alt="Paper 3" class="paper p3">
                 </div>
             </div>
         </section>
@@ -79,21 +76,21 @@
 
                     <div class="steps">
                         <div class="step">
-                            <div class="step-num">01</div>
+                            <div class="step-num step-1">01</div>
                             <div class="step-content">
                                 <h4>Create an Account</h4>
                                 <p>Sign up with your institutional email. Choose student or organizer and get instant access.</p>
                             </div>
                         </div>
                         <div class="step">
-                            <div class="step-num num-blue">02</div>
+                            <div class="step-num step-2">02</div>
                             <div class="step-content">
                                 <h4>Discover & RSVP</h4>
                                 <p>Browse upcoming events filtered by category, org, or date. RSVP in seconds.</p>
                             </div>
                         </div>
                         <div class="step">
-                            <div class="step-num num-green">03</div>
+                            <div class="step-num step-3">03</div>
                             <div class="step-content">
                                 <h4>Track & Engage</h4>
                                 <p>Organizers monitor attendance live. Students leave reviews and follow their favorite organizations.</p>
@@ -102,12 +99,12 @@
                     </div>
                 </div>
 
+                <!-- LAPTOP VISUAL WITH BLOBS -->
                 <div class="works-visual">
-                    <div class="laptop-container">
-                        <img src="dashboard-preview.png" alt="Dashboard Preview" class="laptop-img">
-                        <div class="blob b-pink"></div>
-                        <div class="blob b-blue"></div>
-                    </div>
+                    <div class="blob b-pink"></div>
+                    <div class="blob b-blue"></div>
+                    <div class="blob b-teal"></div>
+                    <img src="dashboard_preview.png" alt="Dashboard Preview" class="laptop-img">
                 </div>
             </div>
         </section>
@@ -117,9 +114,7 @@
     <footer>
         <div class="container footer-grid">
             <div class="footer-brand">
-                <div class="logo">
-                    <img src="logo-white.png" alt="Univents"> <span>Univents</span>
-                </div>
+                <div class="logo-footer"><span>Univents</span></div>
                 <p>The smarter way to discover, RSVP, and manage university events on campus.</p>
             </div>
             <div class="footer-links">
