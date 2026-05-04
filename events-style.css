@@ -1,0 +1,114 @@
+:root {
+    --teal-dark: #326257;
+    --orange-coral: #E68A6E;
+    --bg-beige: #F2EDE4;
+    --text-dark: #333;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+/* Header & Banner */
+header { 
+    background: #F2EDE4; 
+    padding: 15px 5%; /* Use percentage for consistent side spacing */
+    width: 100%;
+}
+.logo { font-family: 'Montserrat'; font-weight: 900; font-size: 1.8rem; }
+.nav-wrapper { 
+    display: flex; 
+    justify-content: space-between; /* This pushes Logo, Nav, and Buttons apart */
+    align-items: center; 
+    max-width: 1400px; /* Optional: caps the width on ultra-wide screens */
+    margin: 0 auto;
+}
+
+nav ul { 
+    display: flex; 
+    list-style: none; 
+    gap: 40px; /* Space between HOME, EVENTS, etc. */
+    margin: 0;
+    padding: 0;
+}
+
+.nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-primary { background: #F1948A; color: white; padding: 10px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; }
+
+.events-banner {
+    background: var(--teal-dark);
+    color: white;
+    padding: 80px 0;
+    position: relative;
+    overflow: hidden;
+}
+.events-banner .container { position: relative; z-index: 2; text-align: left; padding: 0 80px;}
+.events-banner h1 { font-family: 'Montserrat'; font-size: 3.5rem; line-height: 1; margin: 15px 0; }
+.sub-label { color: #7FB3D5; font-weight: bold; text-transform: uppercase; font-size: 0.8rem; }
+
+/* Search Bar */
+.search-bar { display: flex; gap: 15px; margin-top: 30px; max-width: 600px; }
+.search-bar input { flex: 1; padding: 15px; border-radius: 10px; border: none; background: rgba(255,255,255,0.2); color: white; }
+.search-bar input::placeholder { color: #ddd; }
+.btn-search { background: var(--orange-coral); color: white; border: none; padding: 0 30px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+
+/* Filters */
+.filters-section { background: #F9F7F2; padding: 20px 80px; }
+.filter-wrapper { display: flex; justify-content: space-between; align-items: center; }
+.tag { background: white; border: 1px solid #ddd; padding: 8px 20px; border-radius: 20px; margin-right: 10px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+.tag.active { background: var(--teal-dark); color: white; border-color: var(--teal-dark); }
+
+/* Grid */
+.events-grid-section { padding: 60px 80px; background: #F9F7F2; }
+.events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+
+.event-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+.card-banner { height: 160px; padding: 20px; position: relative; }
+.category-tag { background: rgba(255,255,255,0.3); color: white; padding: 5px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: bold; }
+
+.card-content { padding: 25px; }
+.org-name { font-size: 0.8rem; color: #888; font-weight: 600; margin-bottom: 10px; }
+.card-content h3 { font-family: 'Montserrat'; font-size: 1.2rem; margin-bottom: 10px; min-height: 3rem; }
+.desc { font-size: 0.85rem; color: #666; margin-bottom: 20px; }
+.event-meta { font-size: 0.8rem; color: #999; margin-bottom: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+.event-meta span { margin-right: 15px; }
+
+.card-footer { display: flex; justify-content: space-between; align-items: center; }
+.spots { color: var(--orange-coral); font-weight: bold; font-size: 0.9rem; }
+.btn-rsvp { background: var(--orange-coral); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+
+/* MODAL STYLES */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none; /* Hidden by default */
+    justify-content: center; align-items: center;
+    z-index: 1000;
+}
+.modal-content {
+    background: white;
+    width: 500px;
+    padding: 60px;
+    border-radius: 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.modal-content h2 { font-family: 'Montserrat'; font-size: 2.5rem; color: #5D4037; margin-bottom: 30px; position: relative; z-index: 2; }
+.modal-buttons { display: flex; flex-direction: column; gap: 15px; position: relative; z-index: 2; }
+.btn-modal { background: var(--orange-coral); color: white; text-decoration: none; padding: 15px; border-radius: 12px; font-weight: bold; font-size: 1.1rem; }
+
+/* Modal Background Blobs */
+.modal-shapes { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; }
+.m-shape { position: absolute; border-radius: 50%; opacity: 0.4; filter: blur(30px); }
+.m1 { width: 300px; height: 300px; background: #D5D8DC; top: -50px; right: -50px; }
+.m2 { width: 200px; height: 200px; background: #FADBD8; top: 100px; left: -50px; }
+.m3 { width: 250px; height: 250px; background: #D2B4DE; bottom: -50px; right: 50px; }
+
+.close-modal { position: absolute; top: 20px; right: 20px; border: none; background: none; font-size: 2rem; cursor: pointer; color: #999; z-index: 3; }
+
+.nav-label { font-size: 0.7rem; color: #555; font-weight: 800; margin: 25px 0 10px 10px; }
