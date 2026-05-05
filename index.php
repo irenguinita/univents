@@ -17,10 +17,10 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="#" class="active">HOME</a></li>
+                    <li><a href="index.php" class="active">HOME</a></li>
                     <li><a href="events.php">EVENTS</a></li>
                     <li><a href="rsvps.php">RSVPs</a></li>
-                    <li><a href="#">ABOUT</a></li>
+                    <li><a href="about.php">ABOUT</a></li>
                 </ul>
             </nav>
             <div class="nav-buttons">
