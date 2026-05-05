@@ -148,7 +148,7 @@ $my_events = $stmtMyEvents->fetchAll();
                                 <h4><?php echo $event['title']; ?></h4>
                                 <p><?php echo date('M d, Y', strtotime($event['start_datetime'])); ?> • <?php echo $event['venue']; ?></p>
                             </div>
-                            <a href="view_registrants.php?id=<?php echo $event['event_id']; ?>" class="status-badge confirmed" style="text-decoration:none;">
+                            <a href="manage_event.php?id=<?php echo $event['event_id']; ?>" class="status-badge confirmed" style="text-decoration:none;">
                                 MANAGE
                             </a>
                         </div>

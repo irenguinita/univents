@@ -63,7 +63,11 @@ nav ul {
 
 /* Grid */
 .events-grid-section { padding: 60px 80px; background: #F9F7F2; }
-.events-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
 
 .event-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 .card-banner { height: 160px; padding: 20px; position: relative; }
@@ -79,6 +83,17 @@ nav ul {
 .card-footer { display: flex; justify-content: space-between; align-items: center; }
 .spots { color: var(--orange-coral); font-weight: bold; font-size: 0.9rem; }
 .btn-rsvp { background: var(--orange-coral); color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+
+
+.card-link {
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.card-link:hover {
+    transform: translateY(-5px);
+}
+
 
 /* MODAL STYLES */
 .modal-overlay {

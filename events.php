@@ -63,24 +63,41 @@ $is_logged_in = isset($_SESSION['user_id']);
     </section>
 
     <!-- GRID -->
-    <section class="events-grid-section">
-        <div class="events-grid">
-            <?php foreach($events as $e): ?>
-            <div class="event-card">
-                <div class="card-banner" style="background: #4BA68D;"></div>
-                <div class="card-content">
-                    <p class="org-name"><?php echo htmlspecialchars($e['org_name']); ?></p>
-                    <h3><?php echo htmlspecialchars($e['title']); ?></h3>
-                    <p class="desc"><?php echo htmlspecialchars(substr($e['description'], 0, 80)); ?>...</p>
-                    <div class="card-footer">
-                        <span class="spots"><?php echo $e['spots_left']; ?> spots left</span>
-                        <button class="btn-rsvp" onclick="handleRSVP(<?php echo $e['event_id']; ?>)">RSVP Now</button>
+<section class="events-grid-section">
+    <div class="events-grid">
+        <?php foreach($events as $e): ?>
+            <!-- Wrap the entire card in the anchor tag -->
+            <a href="view_event.php?id=<?php echo $e['event_id']; ?>" class="card-link" style="text-decoration:none; color:inherit;">
+                <div class="event-card">
+                    <!-- Banner -->
+                    <div class="card-banner" style="background: #4BA68D;"></div>
+                    
+                    <div class="card-content">
+                        <!-- Organization Name -->
+                        <p class="org-name"><?php echo htmlspecialchars($e['org_name']); ?></p>
+                        
+                        <!-- Event Title -->
+                        <h3><?php echo htmlspecialchars($e['title']); ?></h3>
+                        
+                        <!-- Description -->
+                        <p class="desc"><?php echo htmlspecialchars(substr($e['description'], 0, 80)); ?>...</p>
+                        
+                        <div class="card-footer">
+                            <!-- Spots Counter -->
+                            <span class="spots"><?php echo $e['spots_left']; ?> spots left</span>
+                            
+                            <!-- RSVP Button -->
+                            <!-- We use stopPropagation so clicking the button doesn't open the "view_event" page -->
+                            <button class="btn-rsvp" onclick="event.preventDefault(); event.stopPropagation(); handleRSVP(<?php echo $e['event_id']; ?>)">
+                                RSVP Now
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <?php endforeach; ?>
-        </div>
-    </section>
+            </a>
+        <?php endforeach; ?>
+    </div>
+</section>
 
     <!-- MODAL 1: AUTH PROMPT (The "Wanna RSVP?" pop-up) -->
     <div id="authModal" class="modal-overlay">

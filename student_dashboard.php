@@ -16,22 +16,18 @@ $stmt->execute([$user_id]);
 $student = $stmt->fetch();
 
 // 2. Fetch Dynamic Stats
-// Count Upcoming RSVPs
 $stmtRSVP = $conn->prepare("SELECT COUNT(*) FROM rsvp r JOIN event e ON r.event_id = e.event_id WHERE r.student_id = ? AND e.start_datetime > NOW()");
 $stmtRSVP->execute([$user_id]);
 $rsvp_count = $stmtRSVP->fetchColumn();
 
-// Count Events Attended (Events in the past that the student RSVP'd to)
 $stmtAttended = $conn->prepare("SELECT COUNT(*) FROM rsvp r JOIN event e ON r.event_id = e.event_id WHERE r.student_id = ? AND e.end_datetime < NOW()");
 $stmtAttended->execute([$user_id]);
 $attended_count = $stmtAttended->fetchColumn();
 
-// Count Orgs "Followed" (Unique organizations the student has interacted with/RSVP'd to)
 $stmtFollowed = $conn->prepare("SELECT COUNT(DISTINCT e.organization_id) FROM rsvp r JOIN event e ON r.event_id = e.event_id WHERE r.student_id = ?");
 $stmtFollowed->execute([$user_id]);
 $followed_count = $stmtFollowed->fetchColumn();
 
-// Count Reviews Written
 $stmtRev = $conn->prepare("SELECT COUNT(*) FROM review WHERE student_id = ?");
 $stmtRev->execute([$user_id]);
 $review_count = $stmtRev->fetchColumn();
@@ -48,7 +44,7 @@ $stmtEvents = $conn->prepare("
 $stmtEvents->execute([$user_id]);
 $upcoming_rsvps = $stmtEvents->fetchAll();
 
-// 4. Fetch Recommended Events (Upcoming events the student hasn't RSVP'd to yet)
+// 4. Fetch Recommended Events
 $stmtRec = $conn->prepare("
     SELECT e.*, o.org_name 
     FROM event e 
@@ -60,7 +56,7 @@ $stmtRec = $conn->prepare("
 $stmtRec->execute([$user_id]);
 $recommended_events = $stmtRec->fetchAll();
 
-// 5. Fetch "Following" List (Organizations the student has RSVP'd to)
+// 5. Fetch "Following" List
 $stmtFollowList = $conn->prepare("
     SELECT DISTINCT o.org_name, o.user_id 
     FROM organization o 
@@ -99,19 +95,16 @@ $follow_list = $stmtFollowList->fetchAll();
                 <a href="student_dashboard.php" class="active"><i class='bx bxs-dashboard'></i> Dashboard</a>
                 <a href="events.php"><i class='bx bx-calendar-event'></i> Browse Events</a>
                 <a href="#"><i class='bx bx-bookmark-heart'></i> My RSVPs</a>
-
                 <p class="nav-label">ACTIVITY</p>
                 <a href="#"><i class='bx bx-bell'></i> Notifications</a>
                 <a href="#"><i class='bx bx-star'></i> Reviews</a>
                 <a href="#"><i class='bx bx-group'></i> Organizations</a>
-
                 <p class="nav-label">ACCOUNT</p>
                 <a href="#"><i class='bx bx-cog'></i> Settings</a>
                 <a href="logout.php"><i class='bx bx-log-out'></i> Log out</a>
             </nav>
         </aside>
 
-        <!-- MAIN CONTENT -->
         <main class="main-content">
             <header class="top-header">
                 <div class="logo">Univents</div>
@@ -122,17 +115,18 @@ $follow_list = $stmtFollowList->fetchAll();
             </header>
 
             <div class="content-body">
-                
-                 <?php if(isset($_SESSION['msg'])): ?>
+                <!-- SESSION MESSAGES -->
+                <?php if(isset($_SESSION['msg'])): ?>
                     <div style="padding: 15px; background: <?php echo ($_SESSION['msg_type'] == 'success') ? '#D5F5E3' : '#FADBD8'; ?>; color: <?php echo ($_SESSION['msg_type'] == 'success') ? '#27AE60' : '#E74C3C'; ?>; border-radius: 10px; margin-bottom: 20px; font-weight: bold; text-align: center; border: 1px solid <?php echo ($_SESSION['msg_type'] == 'success') ? '#27AE60' : '#E74C3C'; ?>;">
                         <?php 
                             echo $_SESSION['msg']; 
-                            unset($_SESSION['msg']); // This clears the message so it doesn't show again on refresh
+                            unset($_SESSION['msg']); 
                             unset($_SESSION['msg_type']);
                         ?>
                     </div>
                 <?php endif; ?>
 
+                <!-- WELCOME SECTION (Cleaned up - not clickable) -->
                 <div class="welcome-section">
                     <h1>Welcome, <span class="teal-text"><?php echo htmlspecialchars(explode(' ', $student['name'])[0]); ?>!</span></h1>
                     <p><?php echo date('l, F j'); ?> • You have <?php echo $rsvp_count; ?> upcoming RSVPs.</p>
@@ -140,30 +134,13 @@ $follow_list = $stmtFollowList->fetchAll();
 
                 <!-- Stats Grid -->
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="dot orange"></div>
-                        <h2><?php echo $rsvp_count; ?></h2>
-                        <p>Upcoming RSVPs</p>
-                    </div>
-                    <div class="stat-card">
-                        <div class="dot teal"></div>
-                        <h2><?php echo $attended_count; ?></h2>
-                        <p>Events Attended</p>
-                    </div>
-                    <div class="stat-card">
-                        <div class="dot blue"></div>
-                        <h2><?php echo $followed_count; ?></h2>
-                        <p>Orgs Interacted</p>
-                    </div>
-                    <div class="stat-card">
-                        <div class="dot yellow"></div>
-                        <h2><?php echo $review_count; ?></h2>
-                        <p>Reviews Written</p>
-                    </div>
+                    <div class="stat-card"><div class="dot orange"></div><h2><?php echo $rsvp_count; ?></h2><p>Upcoming RSVPs</p></div>
+                    <div class="stat-card"><div class="dot teal"></div><h2><?php echo $attended_count; ?></h2><p>Events Attended</p></div>
+                    <div class="stat-card"><div class="dot blue"></div><h2><?php echo $followed_count; ?></h2><p>Orgs Interacted</p></div>
+                    <div class="stat-card"><div class="dot yellow"></div><h2><?php echo $review_count; ?></h2><p>Reviews Written</p></div>
                 </div>
 
                 <div class="dashboard-grid">
-                    <!-- Left Column -->
                     <div class="lists-column">
                         <div class="section-header">
                             <h3>Upcoming RSVPs</h3>
@@ -175,7 +152,8 @@ $follow_list = $stmtFollowList->fetchAll();
                         <?php endif; ?>
 
                         <?php foreach($upcoming_rsvps as $event): ?>
-                        <div class="event-row">
+                        <!-- CLICKABLE EVENT ROW -->
+                        <div class="event-row" onclick="window.location='view_event.php?id=<?php echo $event['event_id']; ?>'" style="cursor:pointer;">
                             <div class="event-indicator"></div>
                             <div class="event-details">
                                 <strong><?php echo htmlspecialchars($event['org_name']); ?></strong>
@@ -192,33 +170,25 @@ $follow_list = $stmtFollowList->fetchAll();
                         </div>
                         
                         <?php foreach($recommended_events as $rec): ?>
-                        <div class="rec-row">
+                        <!-- CLICKABLE RECOMMENDED ROW -->
+                        <div class="rec-row" onclick="window.location='view_event.php?id=<?php echo $rec['event_id']; ?>'" style="cursor:pointer;">
                             <div class="rec-icon <?php echo ($rec['event_id'] % 2 == 0) ? 'purple' : 'orange'; ?>"></div>
                             <div class="rec-details">
                                 <h4><?php echo htmlspecialchars($rec['title']); ?></h4>
-                                <p><?php echo date('M d', strtotime($rec['start_datetime'])); ?> • <?php echo htmlspecialchars($rec['venue']); ?> • <?php echo htmlspecialchars($rec['org_name']); ?></p>
+                                <p><?php echo date('M d', strtotime($rec['start_datetime'])); ?> • <?php echo htmlspecialchars($rec['venue']); ?></p>
                             </div>
                         </div>
                         <?php endforeach; ?>
                     </div>
 
-                    <!-- Right Column -->
                     <div class="widgets-column">
                         <div class="widget calendar-widget">
-                            <div class="calendar-header">
-                                <strong><?php echo date('F Y'); ?></strong>
-                            </div>
-                            <div style="text-align:center; padding:20px; color:#ccc;">
-                                <i class='bx bx-calendar' style="font-size: 3rem;"></i>
-                                <p>Calendar Sync Active</p>
-                            </div>
+                            <div class="calendar-header"><strong><?php echo date('F Y'); ?></strong></div>
+                            <div style="text-align:center; padding:20px; color:#ccc;"><i class='bx bx-calendar' style="font-size: 3rem;"></i><p>Calendar Sync Active</p></div>
                         </div>
 
                         <div class="widget following-widget">
-                            <div class="section-header">
-                                <h3>Interacted Orgs</h3>
-                                <a href="#">Manage</a>
-                            </div>
+                            <div class="section-header"><h3>Interacted Orgs</h3><a href="#">Manage</a></div>
                             <?php foreach($follow_list as $f): ?>
                             <div class="follow-item">
                                 <div class="follow-icon blue"><?php echo substr($f['org_name'], 0, 1); ?></div>
@@ -231,7 +201,5 @@ $follow_list = $stmtFollowList->fetchAll();
             </div>
         </main>
     </div>
-
 </body>
 </html>
-
