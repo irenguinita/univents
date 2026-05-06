@@ -9,7 +9,7 @@ if (isset($_POST['register'])) {
 
     try {
         $conn->beginTransaction();
-        $stmt1 = $conn->prepare("INSERT INTO user (institutional_email, password, user_status) VALUES (?, ?, 'Active')");
+        $stmt1 = $conn->prepare("INSERT INTO \"user\"(institutional_email, password, user_status) VALUES (?, ?, 'Active')");
         $stmt1->execute([$email, $pass]);
         $new_id = $conn->lastInsertId();
 
