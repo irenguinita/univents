@@ -172,8 +172,8 @@ if (isset($_POST['register'])) {
         <nav>
             <a href="index.php">HOME</a>
             <a href="events.php">EVENTS</a>
-            <a href="#">RSVPs</a>
-            <a href="#">ABOUT</a>
+            <a href="rsvps.php">RSVPs</a>
+            <a href="about.php">ABOUT</a>
         </nav>
     </header>
 

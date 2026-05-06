@@ -40,98 +40,225 @@ $spots_left = $event['maximum_capacity'] - $spots_taken;
 <head>
     <meta charset="UTF-8">
     <title><?php echo htmlspecialchars($event['title']); ?> - Univents</title>
-    <link rel="stylesheet" href="events-style.css">
+    <link rel="stylesheet" href="auth-style.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
-        .detail-container { display: grid; grid-template-columns: 1.5fr 1fr; gap: 50px; padding: 60px 80px; background: #F9F7F2; min-height: 80vh; }
-        .event-main-info h1 { font-family: 'Montserrat'; font-size: 3.5rem; line-height: 1; margin-bottom: 20px; }
-        .org-badge { color: #326257; font-weight: 800; margin-bottom: 10px; display: block; }
-        .description-box { margin-top: 30px; font-size: 1.1rem; line-height: 1.8; color: #555; }
+        body { background-color: #F9F7F2; font-family: 'Inter', sans-serif; }
         
-        .action-card { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); height: fit-content; position: sticky; top: 100px; }
-        .btn-cancel { background: #FADBD8; color: #E74C3C; border: 2px solid #E74C3C; width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        .btn-cancel:hover { background: #E74C3C; color: white; }
+        .view-wrapper {
+            max-width: 1200px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+            padding: 0 20px;
+        }
 
-        /* Modal Styles for Feedback */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(5px); }
-        .modal-content { background: white; width: 400px; padding: 40px; border-radius: 30px; text-align: center; }
+        /* Left Content Column */
+        .event-main-card {
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+
+        .org-badge {
+            display: inline-block;
+            background: rgba(50, 98, 87, 0.1);
+            color: #326257;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .event-title {
+            font-family: 'Montserrat';
+            font-weight: 900;
+            font-size: 3.2rem;
+            line-height: 1.1;
+            color: #2D2E2E;
+            margin-bottom: 30px;
+        }
+
+        .section-label {
+            font-family: 'Montserrat';
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .description-text {
+            color: #666;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        /* Right Sidebar Column */
+        .action-sidebar {
+            background: #326257;
+            color: white;
+            padding: 40px;
+            border-radius: 30px;
+            height: fit-content;
+            position: sticky;
+            top: 40px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .info-row i { font-size: 1.4rem; color: #F1948A; }
+        .info-text h4 { font-size: 0.8rem; opacity: 0.7; text-transform: uppercase; margin-bottom: 4px; }
+        .info-text p { font-weight: 600; font-size: 1rem; }
+
+        .btn-action {
+            width: 100%;
+            padding: 18px;
+            border-radius: 15px;
+            border: none;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary { background: #F1948A; color: white; }
+        .btn-primary:hover { background: #E68A6E; transform: translateY(-3px); }
+        
+        .btn-cancel { 
+            background: transparent; 
+            border: 2px solid rgba(255,255,255,0.3); 
+            color: white; 
+            margin-top: 15px;
+        }
+        .btn-cancel:hover { background: rgba(231, 76, 60, 0.2); border-color: #E74C3C; }
+
+        /* Modal styling */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: white; padding: 40px; border-radius: 25px; text-align: center; width: 90%; max-width: 400px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="nav-wrapper">
-            <div class="logo">Univents</div>
-            <nav>
-                <ul>
-                    <li><a href="index.php">HOME</a></li>
-                    <li><a href="events.php">EVENTS</a></li>
-                </ul>
-            </nav>
-            <a href="student_dashboard.php" style="text-decoration:none; color:#326257; font-weight:bold;">← Back to Dashboard</a>
+   <header style="background: white; padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+    <div class="nav-wrapper" style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; box-sizing: border-box;">
+        
+        <!-- Univents Logo -->
+        <a href="index.php" class="logo" style="font-family: 'Montserrat'; font-weight: 900; font-size: 1.8rem; color: #333; text-decoration: none;">Univents</a>
+        
+        <!-- Smart Back Button -->
+        <div class="nav-buttons">
+            <a href="javascript:history.back()" style="text-decoration: none; color: #326257; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;">
+                <i class='bx bx-arrow-back' style="font-size: 1.2rem;"></i> BACK
+            </a>
         </div>
-    </header>
+    </div>
+</header>
 
-    <div class="detail-container">
-        <!-- LEFT: Content -->
-        <div class="event-main-info">
-            <span class="org-badge">HOSTED BY <?php echo strtoupper($event['org_name']); ?></span>
-            <h1><?php echo htmlspecialchars($event['title']); ?></h1>
+    <div class="view-wrapper">
+        <!-- Main Content Area -->
+        <div class="event-main-card">
+            <!-- Breadcrumb style back link for extra UX -->
+            <a href="events.php" style="text-decoration: none; color: #999; font-size: 0.8rem; font-weight: 600; margin-bottom: 20px; display: block;">
+                EVENTS / <?php echo strtoupper(htmlspecialchars($event['title'])); ?>
+            </a>
             
-            <div class="description-box">
-                <h3 style="font-family: 'Montserrat'; margin-bottom: 15px;">About this Event</h3>
-                <p><?php echo nl2br(htmlspecialchars($event['description'])); ?></p>
+            <span class="org-badge">HOSTED BY <?php echo strtoupper($event['org_name']); ?></span>
+            <h1 class="event-title"><?php echo htmlspecialchars($event['title']); ?></h1>
+            
+            <div class="description-section">
+                <h3 class="section-label">About this Event</h3>
+                <p class="description-text"><?php echo nl2br(htmlspecialchars($event['description'])); ?></p>
             </div>
         </div>
 
-        <!-- RIGHT: Action Sidebar -->
-        <div class="action-card">
-            <h3>Event Logistics</h3>
-            <p style="margin-top:10px;"><strong>Location:</strong> <?php echo htmlspecialchars($event['venue']); ?></p>
-            <p><strong>Time:</strong> <?php echo date('F j, Y • g:i A', strtotime($event['start_datetime'])); ?></p>
-            <p><strong>Spots:</strong> <?php echo $spots_left; ?> remaining</p>
+        <!-- Sticky Sidebar Area -->
+        <div class="action-sidebar">
+            <h3 class="section-label" style="color: white; margin-bottom: 30px;">Event Details</h3>
             
-            <hr style="margin:20px 0; border:none; border-top: 1px solid #eee;">
+            <div class="info-row">
+                <i class='bx bx-calendar-event'></i>
+                <div class="info-text">
+                    <h4>Date & Time</h4>
+                    <p><?php echo date('F j, Y', strtotime($event['start_datetime'])); ?><br>
+                       <?php echo date('g:i A', strtotime($event['start_datetime'])); ?></p>
+                </div>
+            </div>
 
+            <div class="info-row">
+                <i class='bx bx-map-pin'></i>
+                <div class="info-text">
+                    <h4>Venue</h4>
+                    <p><?php echo htmlspecialchars($event['venue']); ?></p>
+                </div>
+            </div>
+
+            <div class="info-row" style="margin-bottom: 40px;">
+                <i class='bx bx-group'></i>
+                <div class="info-text">
+                    <h4>Availability</h4>
+                    <p><?php echo ($spots_left > 0) ? $spots_left . " spots remaining" : "Event Full"; ?></p>
+                </div>
+            </div>
+
+            <!-- Contextual Action Buttons -->
             <?php if (!$user_id): ?>
-                <button class="btn-rsvp" onclick="location.href='login.php'" style="width:100%;">Log in to RSVP</button>
+                <button class="btn-action btn-primary" onclick="location.href='login.php'">
+                    Log in to RSVP <i class='bx bx-right-arrow-alt'></i>
+                </button>
             
             <?php elseif ($role === 'org'): ?>
-                <p style="text-align:center; color:#888;">Organizations cannot RSVP.</p>
+                <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; text-align: center;">
+                    <p style="font-size: 0.9rem; font-weight: 500;">Org View: RSVPs Disabled</p>
+                </div>
 
             <?php elseif ($is_rsvpd === true): ?>
                 <div style="text-align:center;">
-                    <p style="color:#27AE60; font-weight:bold; margin-bottom:10px;">✓ You are registered</p>
-                    <button class="btn-cancel" onclick="confirmCancel(<?php echo $event_id; ?>)">Cancel RSVP</button>
+                    <div style="background: #27AE60; color: white; padding: 15px; border-radius: 12px; margin-bottom: 10px; font-weight: bold;">
+                        <i class='bx bx-check-circle'></i> You are Registered
+                    </div>
+                    <button class="btn-action btn-cancel" onclick="confirmCancel(<?php echo $event_id; ?>)">
+                        Cancel My RSVP
+                    </button>
                 </div>
 
             <?php else: ?>
-                <button class="btn-rsvp" onclick="handleRSVP(<?php echo $event_id; ?>)" style="width:100%;">RSVP Now</button>
+                <button class="btn-action btn-primary" onclick="handleRSVP(<?php echo $event_id; ?>)" <?php echo ($spots_left <= 0) ? 'disabled' : ''; ?>>
+                    <?php echo ($spots_left > 0) ? "RSVP Now" : "Sold Out"; ?> <i class='bx bx-chevron-right'></i>
+                </button>
             <?php endif; ?>
         </div>
     </div>
 
-    <!-- RESULT MODAL (For RSVP Feedback) -->
+    <!-- Result Modal -->
     <div id="resultModal" class="modal-overlay">
         <div class="modal-content">
-            <h2 id="resultTitle">Success!</h2>
+            <h2 id="resultTitle" style="font-family: 'Montserrat'; font-weight: 900;"></h2>
             <p id="resultMessage" style="margin: 20px 0; color: #666;"></p>
-            <button class="btn-modal" onclick="location.reload()" style="width:100%; padding:15px; background:#E68A6E; color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">Great!</button>
+            <button class="btn-action btn-primary" onclick="location.reload()">Done</button>
         </div>
     </div>
 
     <script>
-        const isLoggedIn = <?php echo $user_id ? 'true' : 'false'; ?>;
-
-        // CANCEL FUNCTION
         function confirmCancel(id) {
-            if (confirm("Are you sure you want to cancel your spot?")) {
+            if (confirm("Are you sure you want to release your spot?")) {
                 window.location.href = "cancel_rsvp.php?id=" + id;
             }
         }
 
-        // RSVP FUNCTION (AJAX)
         function handleRSVP(eventId) {
             fetch('process_rsvp.php', {
                 method: 'POST',
@@ -140,7 +267,7 @@ $spots_left = $event['maximum_capacity'] - $spots_taken;
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('resultTitle').innerText = (data.status === 'success') ? "Success!" : "Oops!";
+                document.getElementById('resultTitle').innerText = (data.status === 'success') ? "Success!" : "Wait!";
                 document.getElementById('resultMessage').innerText = data.message;
                 document.getElementById('resultModal').style.display = 'flex';
             });

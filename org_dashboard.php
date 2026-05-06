@@ -65,24 +65,22 @@ $my_events = $stmtMyEvents->fetchAll();
         <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sidebar-user">
-                <!-- Using first letter of Org Name -->
-                <div class="user-avatar" style="background: #4BA68D;"><?php echo substr($org['org_name'], 0, 1); ?></div>
+                <div class="user-avatar" style="background: var(--teal);"><?= substr($org['org_name'], 0, 1); ?></div>
                 <div class="user-info">
-                    <h4><?php echo $org['org_name']; ?></h4>
-                    <p>ORGANIZER • <?php echo $org['verification_status']; ?></p>
+                    <h4><?= htmlspecialchars($org['org_name']); ?></h4>
+                    <p>ORGANIZER • <?= $org['verification_status']; ?></p>
                 </div>
             </div>
-
             <nav class="side-nav">
                 <p class="nav-label">MAIN</p>
-                <a href="#" class="active"><i class='bx bxs-dashboard'></i> Dashboard</a>
+                <a href="org_dashboard.php" class="active"><i class='bx bxs-dashboard'></i> Dashboard</a>
+                <a href="events.php"><i class='bx bx-globe'></i> Public View</a>
                 
                 <p class="nav-label">OPERATIONS</p>
                 <a href="create_event.php"><i class='bx bx-plus-circle'></i> Create Event</a>
-                <a href="#"><i class='bx bx-bar-chart-alt-2'></i> Summary</a>
+                <a href="org_summary.php"><i class='bx bx-bar-chart-alt-2'></i> Analytics</a>
 
                 <p class="nav-label">ACCOUNT</p>
-                <a href="#"><i class='bx bx-cog'></i> Settings</a>
                 <a href="logout.php"><i class='bx bx-log-out'></i> Log out</a>
             </nav>
         </aside>

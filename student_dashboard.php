@@ -16,7 +16,8 @@ $stmt->execute([$user_id]);
 $student = $stmt->fetch();
 
 // 2. Fetch Dynamic Stats
-$stmtRSVP = $conn->prepare("SELECT COUNT(*) FROM rsvp r JOIN event e ON r.event_id = e.event_id WHERE r.student_id = ? AND e.start_datetime > NOW()");
+// We use e.start_datetime >= CURRENT_DATE to be more inclusive of today's events
+$stmtRSVP = $conn->prepare("SELECT COUNT(*) FROM rsvp r JOIN event e ON r.event_id = e.event_id WHERE r.student_id = ? AND e.start_datetime >= CURRENT_DATE");
 $stmtRSVP->execute([$user_id]);
 $rsvp_count = $stmtRSVP->fetchColumn();
 
@@ -32,26 +33,28 @@ $stmtRev = $conn->prepare("SELECT COUNT(*) FROM review WHERE student_id = ?");
 $stmtRev->execute([$user_id]);
 $review_count = $stmtRev->fetchColumn();
 
-// 3. Fetch Upcoming RSVP List (Top 3)
+// 3. Fetch ALL Upcoming RSVPs (REMOVED ALL LIMITS)
+// Changed NOW() to CURRENT_DATE to ensure events happening today are also caught.
 $stmtEvents = $conn->prepare("
     SELECT e.*, r.rsvp_status, o.org_name 
     FROM event e 
     JOIN rsvp r ON e.event_id = r.event_id 
     JOIN organization o ON e.organization_id = o.user_id
-    WHERE r.student_id = ? AND e.start_datetime > NOW()
-    ORDER BY e.start_datetime ASC LIMIT 3
+    WHERE r.student_id = ? 
+    AND e.start_datetime >= CURRENT_DATE
+    ORDER BY e.start_datetime ASC
 ");
 $stmtEvents->execute([$user_id]);
 $upcoming_rsvps = $stmtEvents->fetchAll();
 
-// 4. Fetch Recommended Events
+// 4. Fetch Recommended Events (Limit to 3)
 $stmtRec = $conn->prepare("
     SELECT e.*, o.org_name 
     FROM event e 
     JOIN organization o ON e.organization_id = o.user_id
     WHERE e.start_datetime > NOW() 
     AND e.event_id NOT IN (SELECT event_id FROM rsvp WHERE student_id = ?)
-    LIMIT 2
+    LIMIT 3
 ");
 $stmtRec->execute([$user_id]);
 $recommended_events = $stmtRec->fetchAll();
@@ -94,11 +97,13 @@ $follow_list = $stmtFollowList->fetchAll();
                 <p class="nav-label">MAIN</p>
                 <a href="student_dashboard.php" class="active"><i class='bx bxs-dashboard'></i> Dashboard</a>
                 <a href="events.php"><i class='bx bx-calendar-event'></i> Browse Events</a>
-                <a href="#"><i class='bx bx-bookmark-heart'></i> My RSVPs</a>
+                <a href="rsvps.php"><i class='bx bx-bookmark-heart'></i> My RSVPs</a>
+                
                 <p class="nav-label">ACTIVITY</p>
                 <a href="#"><i class='bx bx-bell'></i> Notifications</a>
                 <a href="#"><i class='bx bx-star'></i> Reviews</a>
                 <a href="#"><i class='bx bx-group'></i> Organizations</a>
+                
                 <p class="nav-label">ACCOUNT</p>
                 <a href="#"><i class='bx bx-cog'></i> Settings</a>
                 <a href="logout.php"><i class='bx bx-log-out'></i> Log out</a>
@@ -110,12 +115,11 @@ $follow_list = $stmtFollowList->fetchAll();
                 <div class="logo">Univents</div>
                 <div class="top-links">
                     <a href="events.php">EVENTS</a>
-                    <a href="#">RSVPs</a>
+                    <a href="rsvps.php">RSVPs</a>
                 </div>
             </header>
 
             <div class="content-body">
-                <!-- SESSION MESSAGES -->
                 <?php if(isset($_SESSION['msg'])): ?>
                     <div style="padding: 15px; background: <?php echo ($_SESSION['msg_type'] == 'success') ? '#D5F5E3' : '#FADBD8'; ?>; color: <?php echo ($_SESSION['msg_type'] == 'success') ? '#27AE60' : '#E74C3C'; ?>; border-radius: 10px; margin-bottom: 20px; font-weight: bold; text-align: center; border: 1px solid <?php echo ($_SESSION['msg_type'] == 'success') ? '#27AE60' : '#E74C3C'; ?>;">
                         <?php 
@@ -126,15 +130,13 @@ $follow_list = $stmtFollowList->fetchAll();
                     </div>
                 <?php endif; ?>
 
-                <!-- WELCOME SECTION (Cleaned up - not clickable) -->
                 <div class="welcome-section">
                     <h1>Welcome, <span class="teal-text"><?php echo htmlspecialchars(explode(' ', $student['name'])[0]); ?>!</span></h1>
-                    <p><?php echo date('l, F j'); ?> • You have <?php echo $rsvp_count; ?> upcoming RSVPs.</p>
+                    <p><?php echo date('l, F j'); ?> • You have <?php echo count($upcoming_rsvps); ?> upcoming RSVPs.</p>
                 </div>
 
-                <!-- Stats Grid -->
                 <div class="stats-grid">
-                    <div class="stat-card"><div class="dot orange"></div><h2><?php echo $rsvp_count; ?></h2><p>Upcoming RSVPs</p></div>
+                    <div class="stat-card"><div class="dot orange"></div><h2><?php echo count($upcoming_rsvps); ?></h2><p>Upcoming RSVPs</p></div>
                     <div class="stat-card"><div class="dot teal"></div><h2><?php echo $attended_count; ?></h2><p>Events Attended</p></div>
                     <div class="stat-card"><div class="dot blue"></div><h2><?php echo $followed_count; ?></h2><p>Orgs Interacted</p></div>
                     <div class="stat-card"><div class="dot yellow"></div><h2><?php echo $review_count; ?></h2><p>Reviews Written</p></div>
@@ -144,7 +146,7 @@ $follow_list = $stmtFollowList->fetchAll();
                     <div class="lists-column">
                         <div class="section-header">
                             <h3>Upcoming RSVPs</h3>
-                            <a href="#">View all →</a>
+                            <a href="rsvps.php">View all →</a>
                         </div>
                         
                         <?php if(empty($upcoming_rsvps)): ?>
@@ -152,7 +154,6 @@ $follow_list = $stmtFollowList->fetchAll();
                         <?php endif; ?>
 
                         <?php foreach($upcoming_rsvps as $event): ?>
-                        <!-- CLICKABLE EVENT ROW -->
                         <div class="event-row" onclick="window.location='view_event.php?id=<?php echo $event['event_id']; ?>'" style="cursor:pointer;">
                             <div class="event-indicator"></div>
                             <div class="event-details">
@@ -169,8 +170,11 @@ $follow_list = $stmtFollowList->fetchAll();
                             <a href="events.php">Browse all →</a>
                         </div>
                         
+                        <?php if(empty($recommended_events)): ?>
+                            <p style="color:#888; padding: 20px;">No recommendations available right now.</p>
+                        <?php endif; ?>
+
                         <?php foreach($recommended_events as $rec): ?>
-                        <!-- CLICKABLE RECOMMENDED ROW -->
                         <div class="rec-row" onclick="window.location='view_event.php?id=<?php echo $rec['event_id']; ?>'" style="cursor:pointer;">
                             <div class="rec-icon <?php echo ($rec['event_id'] % 2 == 0) ? 'purple' : 'orange'; ?>"></div>
                             <div class="rec-details">
