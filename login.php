@@ -192,10 +192,11 @@ if (isset($_POST['login'])) {
             right: 14px; top: 50%;
             transform: translateY(-50%);
             background: none; border: none;
-            cursor: pointer; color: #aaa;
-            font-size: 1.1rem; padding: 0;
+            cursor: pointer; padding: 0;
+            display: flex; align-items: center;
         }
-        .pw-toggle:hover { color: #326257; }
+        .pw-toggle svg { width: 18px; height: 18px; stroke: #bbb; fill: none; transition: stroke .15s; }
+        .pw-toggle:hover svg { stroke: #326257; }
 
         /* Back link */
         .modal-back {
@@ -287,7 +288,12 @@ if (isset($_POST['login'])) {
                     <label>New Password</label>
                     <div class="pw-wrap">
                         <input type="password" id="newPassword" placeholder="Min. 8 characters">
-                        <button type="button" class="pw-toggle" data-target="newPassword">👁</button>
+                        <button type="button" class="pw-toggle" data-target="newPassword" aria-label="Show password">
+                            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="strength-bar-wrap"><div class="strength-bar" id="strengthBar"></div></div>
                     <div class="strength-label" id="strengthLabel"></div>
@@ -296,7 +302,12 @@ if (isset($_POST['login'])) {
                     <label>Confirm Password</label>
                     <div class="pw-wrap">
                         <input type="password" id="confirmPassword" placeholder="Re-enter password">
-                        <button type="button" class="pw-toggle" data-target="confirmPassword">👁</button>
+                        <button type="button" class="pw-toggle" data-target="confirmPassword" aria-label="Show password">
+                            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
                 <button class="btn-modal-primary" id="resetPasswordBtn">Update Password →</button>
@@ -414,11 +425,16 @@ if (isset($_POST['login'])) {
         });
 
         // ── Password Toggle ───────────────────────
+        const EYE_OPEN = `<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+        const EYE_SHUT = `<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+
         document.querySelectorAll('.pw-toggle').forEach(btn => {
             btn.addEventListener('click', () => {
                 const input = document.getElementById(btn.dataset.target);
-                input.type = input.type === 'password' ? 'text' : 'password';
-                btn.textContent = input.type === 'password' ? '👁' : '🙈';
+                const showing = input.type === 'text';
+                input.type = showing ? 'password' : 'text';
+                btn.innerHTML = showing ? EYE_OPEN : EYE_SHUT;
+                btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
             });
         });
 
