@@ -10,7 +10,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'org') {
 
 $user_id = $_SESSION['user_id'];
 
-// Fetch Org info for sidebar
 $stmt = $conn->prepare("SELECT * FROM organization WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $org = $stmt->fetch();

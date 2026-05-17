@@ -2,21 +2,18 @@
 include 'db.php';
 session_start();
 
-// 1. Get IDs
 $event_id = isset($_GET['id']) ? $_GET['id'] : null;
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 $role = isset($_SESSION['role']) ? $_SESSION['role'] : null;
 
 if (!$event_id) { die("No event selected."); }
 
-// 2. Fetch Event Details
 $stmt = $conn->prepare("SELECT e.*, o.org_name FROM event e JOIN organization o ON e.organization_id = o.user_id WHERE e.event_id = ?");
 $stmt->execute([$event_id]);
 $event = $stmt->fetch();
 
 if (!$event) { die("Event not found."); }
 
-// 3. CHECK RSVP STATUS
 $is_rsvpd = false;
 if ($user_id && $role === 'student') {
     $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM rsvp WHERE student_id = ? AND event_id = ?");
@@ -28,7 +25,6 @@ if ($user_id && $role === 'student') {
     }
 }
 
-// 4. Calculate Spots Left
 $stmtSpots = $conn->prepare("SELECT COUNT(*) FROM rsvp WHERE event_id = ?");
 $stmtSpots->execute([$event_id]);
 $spots_taken = $stmtSpots->fetchColumn();

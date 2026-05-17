@@ -16,7 +16,7 @@ $dashboard_link = ($role === 'org') ? 'org_dashboard.php' : 'student_dashboard.p
     <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* THE FIX: Ensures white background expands to the footer */
+
         html, body {
             height: 100%;
             margin: 0;
@@ -24,15 +24,15 @@ $dashboard_link = ($role === 'org') ? 'org_dashboard.php' : 'student_dashboard.p
         body {
             display: flex;
             flex-direction: column;
-            background: #F9F7F2; /* Hero/Header background */
+            background: #F9F7F2; 
         }
         main {
-            flex: 1 0 auto; /* Pushes footer down */
+            flex: 1 0 auto; 
             display: flex;
             flex-direction: column;
         }
         .how-it-works {
-            flex-grow: 1; /* Makes the white section fill the remaining space */
+            flex-grow: 1; 
             background: #FFFFFF;
             padding: 100px 0;
         }

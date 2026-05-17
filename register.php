@@ -29,6 +29,7 @@ if (isset($_POST['register'])) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -216,9 +217,9 @@ if (isset($_POST['register'])) {
                     </div>
 
                     <div class="input-group">
-                        <label id="dynamic_label">Department</label>
+                        <label id="dynamic_label">College</label>
                         <select name="dept" id="dept_select">
-                            <option value="" disabled selected>Select Department</option>
+                            <option value="" disabled selected>Select College</option>
                             <option value="CCS">College of Computer Studies</option>
                             <option value="CEA">College of Engineering & Architecture</option>
                             <option value="CASE">College of Arts, Sciences & Education</option>

@@ -2,16 +2,12 @@
 include 'db.php';
 session_start();
 
-// FETCH LIVE STATS FROM SUPABASE
-// 1. Total Registered Students
 $stmtStudents = $conn->query("SELECT COUNT(*) FROM student");
 $student_count = $stmtStudents->fetchColumn();
 
-// 2. Total Active Events
 $stmtEvents = $conn->query("SELECT COUNT(*) FROM event WHERE current_status = 'Upcoming'");
 $event_count = $stmtEvents->fetchColumn();
 
-// 3. Total Partner Organizations
 $stmtOrgs = $conn->query("SELECT COUNT(*) FROM organization");
 $org_count = $stmtOrgs->fetchColumn();
 

@@ -75,6 +75,22 @@ $dashboard_link = ($role === 'org') ? 'org_dashboard.php' : 'student_dashboard.p
         .e-card-footer { border-top: 1px solid #eee; padding-top: 20px; display: flex; justify-content: space-between; align-items: center; }
         .spots-label { color: #E67E22; font-weight: 700; font-size: 0.9rem; }
         .btn-view-details { background: #F1948A; color: white; padding: 12px 25px; border-radius: 12px; font-weight: 900; text-decoration: none; font-size: 0.8rem; transition: 0.2s; }
+
+        /* Event Tabs */
+        .tab-bar-events { display: flex; gap: 8px; margin-bottom: 36px; border-bottom: 2px solid #e0dbd0; padding-bottom: 0; }
+        .tab-btn-ev {
+            padding: 13px 28px; background: none; border: none; cursor: pointer;
+            font-family: 'Montserrat'; font-weight: 800; font-size: 0.85rem;
+            color: #aaa; letter-spacing: 0.5px; position: relative; bottom: -2px;
+            border-bottom: 3px solid transparent; transition: 0.2s;
+        }
+        .tab-btn-ev:hover { color: #555; }
+        .tab-btn-ev.active { color: #326257; border-bottom-color: #326257; }
+        .tab-count-ev { background: #eee; color: #888; border-radius: 20px; padding: 2px 9px; font-size: 0.75rem; margin-left: 7px; }
+        .tab-btn-ev.active .tab-count-ev { background: #cce8e3; color: #326257; }
+        .tab-panel-ev { display: none; }
+        .tab-panel-ev.active { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; padding-bottom: 80px; }
+        .empty-ev { display: flex; justify-content: center; align-items: center; padding: 80px 20px; color: #bbb; font-size: 1rem; }
     </style>
 </head>
 <body style="background: #F9F7F2;">
@@ -127,19 +143,40 @@ $dashboard_link = ($role === 'org') ? 'org_dashboard.php' : 'student_dashboard.p
 
     <!-- Content Area -->
     <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 5%;">
-        <div class="filters">
-            <a href="#" class="chip active">All</a>
-            <a href="#" class="chip">Technology</a>
-            <a href="#" class="chip">Organization</a>
-            <a href="#" class="chip">Hackathon</a>
-            <a href="#" class="chip">Academic</a>
+<?php
+$events_upcoming = array_filter($events, fn($e) => strtotime($e['start_datetime']) > time());
+$events_finished = array_filter($events, fn($e) => strtotime($e['end_datetime']) < time());
+$events_all      = $events;
+$gradients = ['linear-gradient(135deg, #76D7C4, #48C9B0)', 'linear-gradient(135deg, #FAD7A0, #E67E22)', 'linear-gradient(135deg, #85929E, #34495E)'];
+?>
+
+        <!-- TAB BAR -->
+        <div class="tab-bar-events">
+            <button class="tab-btn-ev active" onclick="switchEvTab('upcoming', this)">
+                UPCOMING <span class="tab-count-ev"><?= count($events_upcoming) ?></span>
+            </button>
+            <button class="tab-btn-ev" onclick="switchEvTab('finished', this)">
+                FINISHED <span class="tab-count-ev"><?= count($events_finished) ?></span>
+            </button>
+            <button class="tab-btn-ev" onclick="switchEvTab('all', this)">
+                ALL EVENTS <span class="tab-count-ev"><?= count($events_all) ?></span>
+            </button>
         </div>
 
-        <div class="events-grid">
-            <?php foreach($events as $index => $e): 
-                $gradients = ['linear-gradient(135deg, #76D7C4, #48C9B0)', 'linear-gradient(135deg, #FAD7A0, #E67E22)', 'linear-gradient(135deg, #85929E, #34495E)'];
-                $bg = $gradients[$index % count($gradients)];
-            ?>
+        <?php
+        $tabs = [
+            'upcoming' => array_values($events_upcoming),
+            'finished' => array_values($events_finished),
+            'all'      => array_values($events_all),
+        ];
+        foreach ($tabs as $tabName => $tabEvents):
+        ?>
+        <div class="tab-panel-ev <?= $tabName === 'upcoming' ? 'active' : '' ?>" id="evTab-<?= $tabName ?>">
+            <?php if (empty($tabEvents)): ?>
+                <div class="empty-ev" style="grid-column:1/-1;">No events in this category.</div>
+            <?php endif; ?>
+            <?php foreach($tabEvents as $index => $e):
+                $bg = $gradients[$index % count($gradients)]; ?>
             <div class="e-card">
                 <div class="e-card-header" style="background: <?= $bg ?>;">
                     <span class="cat-tag">Event</span>
@@ -159,6 +196,16 @@ $dashboard_link = ($role === 'org') ? 'org_dashboard.php' : 'student_dashboard.p
             </div>
             <?php endforeach; ?>
         </div>
+        <?php endforeach; ?>
+
+<script>
+function switchEvTab(name, btn) {
+    document.querySelectorAll('.tab-panel-ev').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn-ev').forEach(b => b.classList.remove('active'));
+    document.getElementById('evTab-' + name).classList.add('active');
+    btn.classList.add('active');
+}
+</script>
     </div>
 
 </body>

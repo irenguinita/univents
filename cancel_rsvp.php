@@ -16,7 +16,9 @@ try {
 
     $_SESSION['msg'] = "Your RSVP has been cancelled.";
     $_SESSION['msg_type'] = "success";
-    header("Location: student_dashboard.php");
+    header("Location: rsvps.php");
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
+
+?>
