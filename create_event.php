@@ -175,7 +175,7 @@ if (isset($_POST['create_event'])) {
 
                         <div class="form-group">
                             <label>Venue:</label>
-                            <input type="text" name="venue" class="form-control" placeholder="E.g. STC Auditorium" required>
+                            <input type="text" name="venue" class="form-control" placeholder="E.g. CITU Gymnasium" required>
                         </div>
 
                         <div class="row">

@@ -245,7 +245,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <label>Year Level</label>
                                 <select name="year_level">
                                     <?php for ($y = 1; $y <= 4; $y++): ?>
-                                    <option value="<?= $y ?>" <?= $profile['year_level'] == $y ? 'selected' : '' ?>><?= $y ?>st/nd/rd/th Year</option>
+                                    <option value="<?= $y ?>" <?= $profile['year_level'] == $y ? 'selected' : '' ?>>Year <?= $y ?></option>
                                     <?php endfor; ?>
                                 </select>
                             </div>
