@@ -29,7 +29,10 @@ $stmtRegs = $conn->prepare("SELECT COUNT(*) FROM rsvp r JOIN event e ON r.event_
 $stmtRegs->execute([$user_id]);
 $total_registrants = $stmtRegs->fetchColumn();
 
-// Fetch ALL org events split into tabs
+$stmtCalDates = $conn->prepare("SELECT TO_CHAR(start_datetime,'YYYY-MM-DD') as edate FROM event WHERE organization_id = ?");
+$stmtCalDates->execute([$user_id]);
+$orgEventDates = $stmtCalDates->fetchAll(PDO::FETCH_COLUMN);
+
 $stmtUpcoming = $conn->prepare("SELECT * FROM event WHERE organization_id = ? AND start_datetime > NOW() ORDER BY start_datetime ASC");
 $stmtUpcoming->execute([$user_id]);
 $tab_upcoming = $stmtUpcoming->fetchAll();
@@ -251,13 +254,8 @@ $tab_cancelled = $stmtCancelled->fetchAll();
                 </div>
 
                 <div class="widgets-column">
-                    <div class="widget calendar-widget">
-                        <div class="calendar-header">
-                            <strong><?= date('F Y') ?></strong>
-                        </div>
-                        <div style="background:#f9f9f9;height:200px;display:flex;align-items:center;justify-content:center;border-radius:10px;color:#ccc;">
-                            Calendar Widget Area
-                        </div>
+                    <div class="widget" style="padding:0;">
+                        <?php include 'calendar_widget.php'; renderCalendarWidget($orgEventDates); ?>
                     </div>
 
                     <div class="widget following-widget">

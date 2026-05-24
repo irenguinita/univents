@@ -169,7 +169,10 @@ if (isset($_POST['register'])) {
 <body>
 
     <header>
-        <div class="logo-nav">Univents</div>
+        <div class="logo-nav" style="display: flex; align-items: center; gap: 10px;">
+            <img src="logo.png" alt="Univents Logo" style="height: 36px; width: auto; object-fit: contain;" onerror="this.style.display='none'">
+            Univents
+        </div>
         <nav>
             <a href="index.php">HOME</a>
             <a href="events.php">EVENTS</a>

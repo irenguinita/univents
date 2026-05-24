@@ -102,7 +102,10 @@ $is_logged_in = isset($_SESSION['user_id']);
     <!-- Header synchronized with other pages[cite: 22] -->
     <header style="padding: 20px 0; background: #F9F7F2; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05);">
         <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 5%; display: flex; justify-content: space-between; align-items: center;">
-            <a href="index.php" class="logo" style="font-family: 'Montserrat'; font-weight: 900; font-size: 1.8rem; color: #333; text-decoration: none;">Univents</a>
+            <a href="index.php" class="logo" style="font-family: 'Montserrat'; font-weight: 900; font-size: 1.8rem; color: #333; text-decoration: none; display: flex; align-items: center; gap: 10px;">
+                <img src="logo.png" alt="Univents Logo" style="height: 38px; width: auto; object-fit: contain;" onerror="this.style.display='none'">
+                Univents
+            </a>
             <nav>
                 <ul style="display: flex; list-style: none; gap: 40px; margin: 0; padding: 0;">
                     <li><a href="index.php" style="text-decoration: none; color: #666; font-weight: 600; font-size: 0.9rem;">HOME</a></li>
@@ -227,7 +230,7 @@ $is_logged_in = isset($_SESSION['user_id']);
         <div class="container" style="display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 50px;">
             <div>
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
-                    <img src="logo_icon.png" alt="Logo" style="width: 40px; height: 40px;"> <!-- Verbatim reference to brand assets[cite: 13] -->
+                    <img src="logo.png" alt="Univents Logo" style="height: 36px; width: auto; object-fit: contain;" onerror="this.style.display='none'">
                     <h2 style="font-family: 'Montserrat'; font-size: 1.8rem; margin: 0; font-weight: 900;">Univents</h2>
                 </div>
                 <p style="opacity: 0.6; font-size: 0.9rem; line-height: 1.6; font-family: 'Inter', sans-serif;">

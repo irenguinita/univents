@@ -14,7 +14,6 @@ if ($is_logged_in) {
     $my_rsvps = $stmt->fetchAll();
 }
 
-// Separate into tabs by event date/status
 $now = new DateTime();
 $upcoming  = array_filter($my_rsvps, fn($r) => new DateTime($r['start_datetime']) > $now);
 $finished  = array_filter($my_rsvps, fn($r) => new DateTime($r['end_datetime']) < $now);
@@ -149,7 +148,10 @@ $cancelled = array_filter($my_rsvps, fn($r) => strtolower($r['rsvp_status']) ===
 
     <header>
         <div class="nav-wrapper">
-            <a href="index.php" class="logo">Univents</a>
+            <a href="index.php" class="logo" style="display: flex; align-items: center; gap: 10px;">
+                <img src="logo.png" alt="Univents Logo" style="height: 38px; width: auto; object-fit: contain;" onerror="this.style.display='none'">
+                Univents
+            </a>
             <?php if (!$is_logged_in): ?>
                 <nav>
                     <ul>

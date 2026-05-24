@@ -31,6 +31,11 @@ $review_count = $stmtRev->fetchColumn();
 
 $now = new DateTime();
 
+// Calendar event dates
+$stmtCalDates = $conn->prepare("SELECT TO_CHAR(e.start_datetime,'YYYY-MM-DD') as edate FROM rsvp r JOIN event e ON r.event_id = e.event_id WHERE r.student_id = ?");
+$stmtCalDates->execute([$user_id]);
+$studentEventDates = $stmtCalDates->fetchAll(PDO::FETCH_COLUMN);
+
 // Upcoming RSVPs
 $stmtEvents = $conn->prepare("
     SELECT e.*, r.rsvp_status, o.org_name 
@@ -163,9 +168,8 @@ $follow_list = $stmtFollowList->fetchAll();
             <a href="events.php"><i class='bx bx-calendar-event'></i> Browse Events</a>
             <a href="rsvps.php"><i class='bx bx-bookmark-heart'></i> My RSVPs</a>
             <p class="nav-label">ACTIVITY</p>
-            <a href="#"><i class='bx bx-bell'></i> Notifications</a>
-            <a href="#"><i class='bx bx-star'></i> Reviews</a>
-            <a href="#"><i class='bx bx-group'></i> Organizations</a>
+            <a href="notifications.php"><i class='bx bx-bell'></i> Notifications</a>
+            <a href="reviews.php"><i class='bx bx-star'></i> Reviews</a>
             <p class="nav-label">ACCOUNT</p>
             <a href="edit_profile.php"><i class='bx bx-user-circle'></i> Edit Profile</a>
             <a href="logout.php"><i class='bx bx-log-out'></i> Log out</a>
@@ -251,12 +255,8 @@ $follow_list = $stmtFollowList->fetchAll();
                 </div>
 
                 <div class="widgets-column">
-                    <div class="widget calendar-widget">
-                        <div class="calendar-header"><strong><?= date('F Y') ?></strong></div>
-                        <div style="text-align:center;padding:20px;color:#ccc;">
-                            <i class='bx bx-calendar' style="font-size:3rem;"></i>
-                            <p>Calendar Sync Active</p>
-                        </div>
+                    <div class="widget" style="padding:0;">
+                        <?php include 'calendar_widget.php'; renderCalendarWidget($studentEventDates); ?>
                     </div>
 
                     <div class="widget following-widget">
@@ -281,6 +281,16 @@ function switchDashTab(name, btn) {
     document.getElementById('dashTab-' + name).classList.add('active');
     btn.classList.add('active');
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const activePanel = document.querySelector('.tab-panel-dash.active');
+    const activeBtn = document.querySelector('.tab-btn-dash.active');
+    if (activePanel) {
+        activePanel.style.display = 'none';
+        void activePanel.offsetHeight;
+        activePanel.style.display = '';
+    }
+});
 
 function showCancelModal(eventId, eventName) {
     document.getElementById('cancelEventName').textContent = eventName;

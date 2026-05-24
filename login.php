@@ -216,7 +216,10 @@ if (isset($_POST['login'])) {
 </head>
 <body>
     <header>
-        <div class="logo">Univents</div>
+        <div class="logo" style="display: flex; align-items: center; gap: 10px;">
+            <img src="logo.png" alt="Univents Logo" style="height: 36px; width: auto; object-fit: contain;" onerror="this.style.display='none'">
+            Univents
+        </div>
         <nav>
             <a href="index.php">HOME</a>
             <a href="events.php">EVENTS</a>
@@ -257,9 +260,6 @@ if (isset($_POST['login'])) {
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════
-         FORGOT PASSWORD MODAL
-    ══════════════════════════════════════════ -->
     <div class="modal-overlay" id="forgotModal">
         <div class="modal-card">
             <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
@@ -331,10 +331,10 @@ if (isset($_POST['login'])) {
         const closeBtn   = document.getElementById('modalClose');
         const forgotLink = document.getElementById('forgotPasswordLink');
 
-        // Stores the uid returned from step 1, sent back in step 2
+
         let pendingUid = null;
 
-        // ── Open / Close ──────────────────────────
+
         forgotLink.addEventListener('click', e => { e.preventDefault(); openModal(); });
         closeBtn.addEventListener('click', closeModal);
         modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
@@ -349,7 +349,6 @@ if (isset($_POST['login'])) {
             modal.classList.remove('active');
         }
 
-        // ── Step Navigation ───────────────────────
         function goToStep(n) {
             document.querySelectorAll('.modal-step').forEach(s => s.classList.remove('active'));
             document.getElementById('step' + n).classList.add('active');
@@ -362,7 +361,6 @@ if (isset($_POST['login'])) {
         });
         document.getElementById('doneBtn').addEventListener('click', closeModal);
 
-        // ── Helper: show error ────────────────────
         function showError(id, msg) {
             const el = document.getElementById(id);
             el.textContent = msg;
@@ -372,7 +370,6 @@ if (isset($_POST['login'])) {
             document.querySelectorAll('.modal-error').forEach(e => e.classList.remove('show'));
         }
 
-        // ── Step 1: Verify Email ──────────────────
         document.getElementById('verifyEmailBtn').addEventListener('click', async () => {
             clearErrors();
             const email = document.getElementById('resetEmail').value.trim();
@@ -405,7 +402,6 @@ if (isset($_POST['login'])) {
             btn.textContent = 'Verify Email →'; btn.disabled = false;
         });
 
-        // ── Password Strength ─────────────────────
         document.getElementById('newPassword').addEventListener('input', function() {
             const val = this.value;
             let score = 0;
@@ -424,7 +420,6 @@ if (isset($_POST['login'])) {
             label.textContent    = score > 0 ? labels[score - 1] : '';
         });
 
-        // ── Password Toggle ───────────────────────
         const EYE_OPEN = `<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
         const EYE_SHUT = `<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
 
@@ -438,7 +433,6 @@ if (isset($_POST['login'])) {
             });
         });
 
-        // ── Step 2: Reset Password ────────────────
         document.getElementById('resetPasswordBtn').addEventListener('click', async () => {
             clearErrors();
             const newPw  = document.getElementById('newPassword').value;
@@ -480,7 +474,6 @@ if (isset($_POST['login'])) {
             btn.textContent = 'Update Password →'; btn.disabled = false;
         });
 
-        // ── Enter key shortcuts ───────────────────
         document.getElementById('resetEmail').addEventListener('keydown', e => {
             if (e.key === 'Enter') document.getElementById('verifyEmailBtn').click();
         });

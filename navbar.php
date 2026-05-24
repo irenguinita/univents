@@ -1,10 +1,8 @@
 <?php
-// navbar.php
 $current_page = basename($_SERVER['PHP_SELF']);
 $is_logged_in = isset($_SESSION['user_id']);
 $role = $_SESSION['role'] ?? null;
 
-// Determine Dashboard Link
 $dashboard_link = "login.php";
 if ($is_logged_in) {
     $dashboard_link = ($role === 'student') ? "student_dashboard.php" : "org_dashboard.php";

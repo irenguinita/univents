@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p><?= strtoupper($role) ?> ACCOUNT</p>
             </div>
         </div>
-        <nav class="side-nav">
+       <nav class="side-nav">
             <p class="nav-label">MAIN</p>
             <a href="<?= $dashboard ?>"><i class='bx bxs-dashboard'></i> Dashboard</a>
             <?php if ($role === 'student'): ?>
@@ -170,7 +170,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="rsvps.php"><i class='bx bx-bookmark-heart'></i> My RSVPs</a>
             <?php else: ?>
             <a href="events.php"><i class='bx bx-globe'></i> Public View</a>
+            <p class="nav-label">OPERATIONS</p>
             <a href="create_event.php"><i class='bx bx-plus-circle'></i> Create Event</a>
+            <a href="org_summary.php"><i class='bx bx-bar-chart-alt-2'></i> Analytics</a>
             <?php endif; ?>
             <p class="nav-label">ACCOUNT</p>
             <a href="edit_profile.php" class="active"><i class='bx bx-user-circle'></i> Edit Profile</a>
@@ -283,9 +285,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
             </div>
 
-            <!-- Danger Zone -->
             <div class="danger-zone">
-                <h4>⚠️ Danger Zone</h4>
+                <h4>⚠️ WARNING</h4>
                 <p>Permanently delete your account and all associated data. This action <strong>cannot be undone</strong>.</p>
                 <button class="btn-danger-outline" onclick="document.getElementById('deleteModal').style.display='flex'">Delete My Account</button>
             </div>

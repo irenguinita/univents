@@ -151,7 +151,10 @@ $gradients = ['linear-gradient(135deg, #76D7C4, #48C9B0)', 'linear-gradient(135d
 
     <header>
         <div class="nav-wrapper">
-            <a href="index.php" class="logo">Univents</a>
+            <a href="index.php" class="logo" style="display: flex; align-items: center; gap: 10px;">
+                <img src="logo.png" alt="Univents Logo" style="height: 38px; width: auto; object-fit: contain;" onerror="this.style.display='none'">
+                Univents
+            </a>
             <?php if (!$is_logged_in): ?>
                 <nav>
                     <ul>

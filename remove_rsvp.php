@@ -18,7 +18,7 @@ if (!$event_id || !$student_id) {
     exit();
 }
 
-// Verify the org owns this event
+//verification
 $check = $conn->prepare("SELECT event_id FROM event WHERE event_id = ? AND organization_id = ?");
 $check->execute([$event_id, $org_id]);
 if (!$check->fetch()) {

@@ -47,7 +47,7 @@ if ($action === 'verify_email') {
     exit();
 }
 
-// ── Reset password ───────────────────────────────────
+//Reset password
 if ($action === 'reset_password') {
     $uid             = $_POST['uid']              ?? '';
     $newPassword     = $_POST['new_password']     ?? '';

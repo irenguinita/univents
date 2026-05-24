@@ -2,10 +2,8 @@
 include 'db.php';
 session_start();
 
-// Set header to JSON so the browser knows how to read the response
 header('Content-Type: application/json');
 
-// 1. Security Check: Is the user a logged-in student?
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'student') {
     echo json_encode(['status' => 'error', 'message' => 'Please log in as a student to RSVP.']);
     exit();
@@ -20,7 +18,6 @@ if (!$event_id) {
 }
 
 try {
-    // 2. Check if already RSVP'd
     $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM rsvp WHERE student_id = ? AND event_id = ?");
     $stmtCheck->execute([$student_id, $event_id]);
     
@@ -29,7 +26,6 @@ try {
         exit();
     }
 
-    // 3. Check Capacity
     $stmtCap = $conn->prepare("
         SELECT maximum_capacity, 
         (SELECT COUNT(*) FROM rsvp WHERE event_id = ?) as current_rsvps 
@@ -43,7 +39,6 @@ try {
         exit();
     }
 
-    // 4. Insert RSVP
     $sql = "INSERT INTO rsvp (student_id, event_id, rsvp_status) VALUES (?, ?, 'Confirmed')";
     $stmtInsert = $conn->prepare($sql);
     
