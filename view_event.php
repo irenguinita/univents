@@ -16,7 +16,7 @@ if (!$event) { die("Event not found."); }
 
 $is_rsvpd = false;
 if ($user_id && $role === 'student') {
-    $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM rsvp WHERE student_id = ? AND event_id = ?");
+    $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM rsvp WHERE student_id = ? AND event_id = ? AND rsvp_status != 'cancelled'");
     $stmtCheck->execute([$user_id, $event_id]);
     $count = $stmtCheck->fetchColumn();
     
@@ -25,7 +25,7 @@ if ($user_id && $role === 'student') {
     }
 }
 
-$stmtSpots = $conn->prepare("SELECT COUNT(*) FROM rsvp WHERE event_id = ?");
+$stmtSpots = $conn->prepare("SELECT COUNT(*) FROM rsvp WHERE event_id = ? AND rsvp_status != 'cancelled'");
 $stmtSpots->execute([$event_id]);
 $spots_taken = $stmtSpots->fetchColumn();
 $spots_left = $event['maximum_capacity'] - $spots_taken;

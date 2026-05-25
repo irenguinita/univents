@@ -11,7 +11,7 @@ $student_id = $_SESSION['user_id'];
 $event_id = $_GET['id'];
 
 try {
-    $stmt = $conn->prepare("DELETE FROM rsvp WHERE student_id = ? AND event_id = ?");
+    $stmt = $conn->prepare("UPDATE rsvp SET rsvp_status = 'cancelled' WHERE student_id = ? AND event_id = ?");
     $stmt->execute([$student_id, $event_id]);
 
     $_SESSION['msg'] = "Your RSVP has been cancelled.";

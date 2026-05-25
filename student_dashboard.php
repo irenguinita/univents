@@ -13,7 +13,7 @@ $stmt = $conn->prepare("SELECT * FROM student WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $student = $stmt->fetch();
 
-$stmtRSVP = $conn->prepare("SELECT COUNT(*) FROM rsvp r JOIN event e ON r.event_id = e.event_id WHERE r.student_id = ? AND e.start_datetime >= CURRENT_DATE");
+$stmtRSVP = $conn->prepare("SELECT COUNT(*) FROM rsvp r JOIN event e ON r.event_id = e.event_id WHERE r.student_id = ? AND e.start_datetime >= CURRENT_DATE AND r.rsvp_status != 'cancelled'");
 $stmtRSVP->execute([$user_id]);
 $rsvp_count = $stmtRSVP->fetchColumn();
 
@@ -42,7 +42,7 @@ $stmtEvents = $conn->prepare("
     FROM event e 
     JOIN rsvp r ON e.event_id = r.event_id 
     JOIN organization o ON e.organization_id = o.user_id
-    WHERE r.student_id = ? AND e.start_datetime >= CURRENT_DATE
+    WHERE r.student_id = ? AND e.start_datetime >= CURRENT_DATE AND r.rsvp_status != 'cancelled'
     ORDER BY e.start_datetime ASC
 ");
 $stmtEvents->execute([$user_id]);
@@ -54,7 +54,7 @@ $stmtRec = $conn->prepare("
     FROM event e 
     JOIN organization o ON e.organization_id = o.user_id
     WHERE e.start_datetime > NOW() 
-    AND e.event_id NOT IN (SELECT event_id FROM rsvp WHERE student_id = ?)
+    AND e.event_id NOT IN (SELECT event_id FROM rsvp WHERE student_id = ? AND rsvp_status != 'cancelled')
     LIMIT 3
 ");
 $stmtRec->execute([$user_id]);

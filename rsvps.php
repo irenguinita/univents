@@ -15,8 +15,8 @@ if ($is_logged_in) {
 }
 
 $now = new DateTime();
-$upcoming  = array_filter($my_rsvps, fn($r) => new DateTime($r['start_datetime']) > $now);
-$finished  = array_filter($my_rsvps, fn($r) => new DateTime($r['end_datetime']) < $now);
+$upcoming  = array_filter($my_rsvps, fn($r) => new DateTime($r['start_datetime']) > $now && strtolower($r['rsvp_status']) !== 'cancelled');
+$finished  = array_filter($my_rsvps, fn($r) => new DateTime($r['end_datetime']) < $now && strtolower($r['rsvp_status']) !== 'cancelled');
 $cancelled = array_filter($my_rsvps, fn($r) => strtolower($r['rsvp_status']) === 'cancelled');
 ?>
 
