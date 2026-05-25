@@ -166,10 +166,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="nav-label">MAIN</p>
             <a href="<?= $dashboard ?>"><i class='bx bxs-dashboard'></i> Dashboard</a>
             <?php if ($role === 'student'): ?>
+            <p class="nav-label">MAIN</p>
             <a href="events.php"><i class='bx bx-calendar-event'></i> Browse Events</a>
             <a href="rsvps.php"><i class='bx bx-bookmark-heart'></i> My RSVPs</a>
+            <p class="nav-label">ACTIVITY</p>
+            <a href="notifications.php"><i class='bx bx-bell'></i> Notifications</a>
+            <a href="reviews.php"><i class='bx bx-star'></i> Reviews</a>
             <?php else: ?>
-            <a href="events.php"><i class='bx bx-globe'></i> Public View</a>
             <p class="nav-label">OPERATIONS</p>
             <a href="create_event.php"><i class='bx bx-plus-circle'></i> Create Event</a>
             <a href="org_summary.php"><i class='bx bx-bar-chart-alt-2'></i> Analytics</a>

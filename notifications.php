@@ -24,7 +24,7 @@ $stmtNotifs = $conn->prepare("
     FROM rsvp r
     JOIN event e ON r.event_id = e.event_id
     JOIN organization o ON e.organization_id = o.user_id
-    WHERE r.student_id = ?
+    WHERE r.student_id = ? AND r.rsvp_status != 'cancelled'
     ORDER BY e.start_datetime DESC
 ");
 $stmtNotifs->execute([$user_id]);

@@ -18,7 +18,7 @@ if (!$event_id) {
 }
 
 try {
-    $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM rsvp WHERE student_id = ? AND event_id = ?");
+    $stmtCheck = $conn->prepare("SELECT COUNT(*) FROM rsvp WHERE student_id = ? AND event_id = ? AND rsvp_status != 'cancelled'");
     $stmtCheck->execute([$student_id, $event_id]);
     
     if ($stmtCheck->fetchColumn() > 0) {
@@ -28,7 +28,7 @@ try {
 
     $stmtCap = $conn->prepare("
         SELECT maximum_capacity, 
-        (SELECT COUNT(*) FROM rsvp WHERE event_id = ?) as current_rsvps 
+        (SELECT COUNT(*) FROM rsvp WHERE event_id = ? AND rsvp_status != 'cancelled') as current_rsvps 
         FROM event WHERE event_id = ?
     ");
     $stmtCap->execute([$event_id, $event_id]);
@@ -39,9 +39,18 @@ try {
         exit();
     }
 
-    $sql = "INSERT INTO rsvp (student_id, event_id, rsvp_status) VALUES (?, ?, 'Confirmed')";
-    $stmtInsert = $conn->prepare($sql);
-    
+    // If a cancelled row exists, reactivate it; otherwise insert fresh
+    $stmtExisting = $conn->prepare("SELECT COUNT(*) FROM rsvp WHERE student_id = ? AND event_id = ? AND rsvp_status = 'cancelled'");
+    $stmtExisting->execute([$student_id, $event_id]);
+
+    if ($stmtExisting->fetchColumn() > 0) {
+        $sql = "UPDATE rsvp SET rsvp_status = 'Confirmed' WHERE student_id = ? AND event_id = ?";
+        $stmtInsert = $conn->prepare($sql);
+    } else {
+        $sql = "INSERT INTO rsvp (student_id, event_id, rsvp_status) VALUES (?, ?, 'Confirmed')";
+        $stmtInsert = $conn->prepare($sql);
+    }
+
     if ($stmtInsert->execute([$student_id, $event_id])) {
         echo json_encode(['status' => 'success', 'message' => 'Your spot has been reserved!']);
     }

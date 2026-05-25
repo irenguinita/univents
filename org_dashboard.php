@@ -143,7 +143,6 @@ $tab_cancelled = $stmtCancelled->fetchAll();
         <nav class="side-nav">
             <p class="nav-label">MAIN</p>
             <a href="org_dashboard.php" class="active"><i class='bx bxs-dashboard'></i> Dashboard</a>
-            <a href="events.php"><i class='bx bx-globe'></i> Public View</a>
             <p class="nav-label">OPERATIONS</p>
             <a href="create_event.php"><i class='bx bx-plus-circle'></i> Create Event</a>
             <a href="org_summary.php"><i class='bx bx-bar-chart-alt-2'></i> Analytics</a>
